@@ -10,7 +10,8 @@ function usePrevious(value) {
 
 function Todo(props) {
   const [isEditing, setEditing] = useState(false);
-  const [newName, setNewName] = useState("");
+  const [newName, setNewName] = useState(props.name || "");
+  const [newDueDate, setNewDueDate] = useState(props.dueDate || "");
 
   const editFieldRef = useRef(null);
   const editButtonRef = useRef(null);
@@ -20,14 +21,25 @@ function Todo(props) {
   function handleChange(event) {
     setNewName(event.target.value);
   }
+  
+  function handleDateChange(event) {
+    setNewDueDate(event.target.value);
+  }
 
   // NOTE: As written, this function has a bug: it doesn't prevent the user
   // from submitting an empty form. This is left as an exercise for developers
   // working through MDN's React tutorial.
   function handleSubmit(event) {
     event.preventDefault();
-    props.editTask(props.id, newName);
+    props.editTask(props.id, newName, newDueDate);
     setNewName("");
+    setNewDueDate("");
+    setEditing(false);
+  }
+  
+  function handleCancel() {
+    setNewName(props.name || "");
+    setNewDueDate(props.dueDate || "");
     setEditing(false);
   }
 
@@ -45,12 +57,22 @@ function Todo(props) {
           onChange={handleChange}
           ref={editFieldRef}
         />
+        <label className="todo-label" htmlFor={props.id + '-date'} style={{marginTop: "1rem"}}>
+          New due date
+        </label>
+        <input
+          id={props.id + '-date'}
+          className="todo-text"
+          type="date"
+          value={newDueDate}
+          onChange={handleDateChange}
+        />
       </div>
       <div className="btn-group">
         <button
           type="button"
           className="btn todo-cancel"
-          onClick={() => setEditing(false)}>
+          onClick={handleCancel}>
           Cancel
           <span className="visually-hidden">renaming {props.name}</span>
         </button>
@@ -62,8 +84,17 @@ function Todo(props) {
     </form>
   );
 
+  const isOverdue = () => {
+    if (!props.dueDate || props.completed) return false;
+    // We compare with the start of today to see if it's passed
+    const due = new Date(props.dueDate + 'T00:00:00');
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return due < today;
+  };
+
   const viewTemplate = (
-    <div className="stack-small">
+    <div className="stack-small" style={{ color: isOverdue() ? 'red' : 'inherit' }}>
       <div className="c-cb">
         <input
           id={props.id}
@@ -73,6 +104,7 @@ function Todo(props) {
         />
         <label className="todo-label" htmlFor={props.id}>
           {props.name}
+          {props.dueDate && <span style={{display: 'block', fontSize: '0.8em', marginTop: '4px'}}>Due: {props.dueDate}</span>}
         </label>
       </div>
       <div className="btn-group">
@@ -81,6 +113,8 @@ function Todo(props) {
           className="btn"
           onClick={() => {
             setEditing(true);
+            setNewName(props.name);
+            setNewDueDate(props.dueDate || "");
           }}
           ref={editButtonRef}>
           Edit <span className="visually-hidden">{props.name}</span>
