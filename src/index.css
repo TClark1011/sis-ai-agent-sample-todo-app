@@ -80,6 +80,7 @@ body {
   cursor: pointer;
   padding: 0.8rem 1rem 0.7rem;
   text-transform: capitalize;
+  background: transparent;
 }
 .btn.toggle-btn {
   border-color: #d3d3d3;
@@ -90,16 +91,15 @@ body {
   text-decoration: underline;
 }
 .btn__danger {
-  background-color: #ca3c3c;
   border-color: #bd2130;
-  color: #fff;
+  color: #ca3c3c; /* Changed to match outline aesthetic */
 }
 .btn__filter {
   border-color: lightgrey;
 }
 .btn__primary {
-  background-color: #000;
-  color: #fff;
+  border-color: #000; /* Use border for outline */
+  color: #000;
 }
 .btn-group {
   display: flex;
