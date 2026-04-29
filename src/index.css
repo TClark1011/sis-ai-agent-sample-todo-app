@@ -294,3 +294,37 @@ body {
   opacity: 1;
 }
 /* End checkbox styles */
+
+/* Dark Mode Styles */
+body.dark-mode {
+  background-color: #121212;
+  color: #e0e0e0;
+}
+body.dark-mode .todoapp {
+  background: #1e1e1e;
+  box-shadow: 0 2px 4px 0 rgb(255 255 255 / 10%), 0 2.5rem 5rem 0 rgb(0 0 0 / 50%);
+}
+body.dark-mode .btn {
+  border-color: #e0e0e0;
+  color: #e0e0e0;
+}
+body.dark-mode .btn.toggle-btn[aria-pressed="true"] {
+  border-color: #e0e0e0;
+}
+body.dark-mode .btn__primary {
+  background-color: #e0e0e0;
+  color: #121212;
+}
+body.dark-mode .input__lg {
+  border-color: #e0e0e0;
+  background-color: #121212;
+  color: #e0e0e0;
+}
+body.dark-mode .todo-text {
+  border-color: #e0e0e0;
+  background-color: #121212;
+  color: #e0e0e0;
+}
+body.dark-mode .c-cb > label::before {
+  border-color: #e0e0e0;
+}
