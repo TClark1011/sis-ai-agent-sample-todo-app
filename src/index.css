@@ -224,6 +224,9 @@ body {
 .todo-text:focus-visible {
   box-shadow: inset 0 0 0 2px;
 }
+.todo-overdue {
+  color: #ca3c3c;
+}
 /* End todo item styles */
 /* Checkbox styles */
 .c-cb {

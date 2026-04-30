@@ -62,6 +62,7 @@ function App(props) {
         id={task.id}
         name={task.name}
         completed={task.completed}
+        dueDate={task.dueDate}
         key={task.id}
         toggleTaskCompleted={toggleTaskCompleted}
         deleteTask={deleteTask}
@@ -78,8 +79,13 @@ function App(props) {
     />
   ));
 
-  function addTask(name) {
-    const newTask = { id: "todo-" + nanoid(), name: name, completed: false };
+  function addTask(name, dueDate) {
+    const newTask = {
+      id: "todo-" + nanoid(),
+      name: name,
+      completed: false,
+      dueDate: dueDate,
+    };
     setTasks([...tasks, newTask]);
   }
 

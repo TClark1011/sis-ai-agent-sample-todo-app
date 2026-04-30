@@ -62,6 +62,10 @@ function Todo(props) {
     </form>
   );
 
+  const today = new Date().toISOString().split('T')[0];
+  const isOverdue = props.dueDate && props.dueDate < today;
+  const textClass = isOverdue ? "todo-label todo-overdue" : "todo-label";
+
   const viewTemplate = (
     <div className="stack-small">
       <div className="c-cb">
@@ -71,8 +75,8 @@ function Todo(props) {
           defaultChecked={props.completed}
           onChange={() => props.toggleTaskCompleted(props.id)}
         />
-        <label className="todo-label" htmlFor={props.id}>
-          {props.name}
+        <label className={textClass} htmlFor={props.id}>
+          {props.name} {props.dueDate && `(Due: ${props.dueDate})`}
         </label>
       </div>
       <div className="btn-group">
