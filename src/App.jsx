@@ -23,6 +23,18 @@ const FILTER_NAMES = Object.keys(FILTER_MAP);
 function App(props) {
   const [tasks, setTasks] = useState(props.tasks);
   const [filter, setFilter] = useState("All");
+  const [theme, setTheme] = useState(() => {
+    return localStorage.getItem("theme") || "light";
+  });
+
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem("theme", theme);
+  }, [theme]);
+
+  function toggleTheme() {
+    setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
+  }
 
   function toggleTaskCompleted(id) {
     const updatedTasks = tasks.map((task) => {
@@ -97,6 +109,11 @@ function App(props) {
 
   return (
     <div className="todoapp stack-large">
+      <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: "1rem" }}>
+        <button type="button" className="btn toggle-btn" onClick={toggleTheme}>
+          Switch to {theme === "light" ? "Dark" : "Light"} Mode
+        </button>
+      </div>
       <h1>TodoMatic</h1>
       <Form addTask={addTask} />
       <div className="filters btn-group stack-exception">{filterList}</div>
