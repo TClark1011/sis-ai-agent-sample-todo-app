@@ -10,15 +10,20 @@ function usePrevious(value) {
 
 function Todo(props) {
   const [isEditing, setEditing] = useState(false);
-  const [newName, setNewName] = useState("");
+  const [newName, setNewName] = useState(props.name);
+  const [newDueDate, setNewDueDate] = useState(props.dueDate || "");
 
   const editFieldRef = useRef(null);
   const editButtonRef = useRef(null);
 
   const wasEditing = usePrevious(isEditing);
 
-  function handleChange(event) {
+  function handleNameChange(event) {
     setNewName(event.target.value);
+  }
+
+  function handleDateChange(event) {
+    setNewDueDate(event.target.value);
   }
 
   // NOTE: As written, this function has a bug: it doesn't prevent the user
@@ -26,8 +31,7 @@ function Todo(props) {
   // working through MDN's React tutorial.
   function handleSubmit(event) {
     event.preventDefault();
-    props.editTask(props.id, newName);
-    setNewName("");
+    props.editTask(props.id, newName, newDueDate);
     setEditing(false);
   }
 
@@ -42,15 +46,32 @@ function Todo(props) {
           className="todo-text"
           type="text"
           value={newName}
-          onChange={handleChange}
+          onChange={handleNameChange}
           ref={editFieldRef}
+        />
+      </div>
+      <div className="form-group">
+        <label className="todo-label" htmlFor={`${props.id}-date`}>
+          New due date for {props.name}
+        </label>
+        <input
+          id={`${props.id}-date`}
+          className="todo-text"
+          type="date"
+          value={newDueDate}
+          onChange={handleDateChange}
         />
       </div>
       <div className="btn-group">
         <button
           type="button"
           className="btn todo-cancel"
-          onClick={() => setEditing(false)}>
+          onClick={() => {
+            setNewName(props.name);
+            setNewDueDate(props.dueDate || "");
+            setEditing(false);
+          }}
+        >
           Cancel
           <span className="visually-hidden">renaming {props.name}</span>
         </button>
@@ -73,6 +94,9 @@ function Todo(props) {
         />
         <label className="todo-label" htmlFor={props.id}>
           {props.name}
+          {props.dueDate && (
+            <span className="todo-date"> (Due: {props.dueDate})</span>
+          )}
         </label>
       </div>
       <div className="btn-group">
@@ -82,13 +106,15 @@ function Todo(props) {
           onClick={() => {
             setEditing(true);
           }}
-          ref={editButtonRef}>
+          ref={editButtonRef}
+        >
           Edit <span className="visually-hidden">{props.name}</span>
         </button>
         <button
           type="button"
           className="btn btn__danger"
-          onClick={() => props.deleteTask(props.id)}>
+          onClick={() => props.deleteTask(props.id)}
+        >
           Delete <span className="visually-hidden">{props.name}</span>
         </button>
       </div>
