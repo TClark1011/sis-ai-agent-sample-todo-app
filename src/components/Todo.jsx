@@ -11,6 +11,7 @@ function usePrevious(value) {
 function Todo(props) {
   const [isEditing, setEditing] = useState(false);
   const [newName, setNewName] = useState("");
+  const [newDueDate, setNewDueDate] = useState(props.dueDate || "");
 
   const editFieldRef = useRef(null);
   const editButtonRef = useRef(null);
@@ -21,12 +22,19 @@ function Todo(props) {
     setNewName(event.target.value);
   }
 
+  function handleDateChange(event) {
+    setNewDueDate(event.target.value);
+  }
+
   // NOTE: As written, this function has a bug: it doesn't prevent the user
   // from submitting an empty form. This is left as an exercise for developers
   // working through MDN's React tutorial.
   function handleSubmit(event) {
     event.preventDefault();
-    props.editTask(props.id, newName);
+    if (newName.trim() === "") {
+      return;
+    }
+    props.editTask(props.id, newName, newDueDate);
     setNewName("");
     setEditing(false);
   }
@@ -45,12 +53,26 @@ function Todo(props) {
           onChange={handleChange}
           ref={editFieldRef}
         />
+        <label className="todo-label" htmlFor={`${props.id}-date`} style={{ marginTop: '10px', display: 'block' }}>
+          New due date for {props.name}
+        </label>
+        <input
+          id={`${props.id}-date`}
+          className="todo-text"
+          type="date"
+          value={newDueDate}
+          onChange={handleDateChange}
+        />
       </div>
       <div className="btn-group">
         <button
           type="button"
           className="btn todo-cancel"
-          onClick={() => setEditing(false)}>
+          onClick={() => {
+            setEditing(false);
+            setNewName(props.name);
+            setNewDueDate(props.dueDate || "");
+          }}>
           Cancel
           <span className="visually-hidden">renaming {props.name}</span>
         </button>
@@ -74,12 +96,19 @@ function Todo(props) {
         <label className="todo-label" htmlFor={props.id}>
           {props.name}
         </label>
+        {props.dueDate && (
+          <div style={{ fontSize: '0.8rem', color: '#555', marginTop: '5px' }}>
+            Due: {props.dueDate}
+          </div>
+        )}
       </div>
       <div className="btn-group">
         <button
           type="button"
           className="btn"
           onClick={() => {
+            setNewName(props.name);
+            setNewDueDate(props.dueDate || "");
             setEditing(true);
           }}
           ref={editButtonRef}>
