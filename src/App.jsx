@@ -21,8 +21,15 @@ const FILTER_MAP = {
 const FILTER_NAMES = Object.keys(FILTER_MAP);
 
 function App(props) {
-  const [tasks, setTasks] = useState(props.tasks);
+  const [tasks, setTasks] = useState(() => {
+    const savedTasks = localStorage.getItem("tasks");
+    return savedTasks ? JSON.parse(savedTasks) : props.tasks;
+  });
   const [filter, setFilter] = useState("All");
+
+  useEffect(() => {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+  }, [tasks]);
 
   function toggleTaskCompleted(id) {
     const updatedTasks = tasks.map((task) => {
@@ -39,6 +46,11 @@ function App(props) {
 
   function deleteTask(id) {
     const remainingTasks = tasks.filter((task) => id !== task.id);
+    setTasks(remainingTasks);
+  }
+
+  function deleteCompletedTasks() {
+    const remainingTasks = tasks.filter((task) => !task.completed);
     setTasks(remainingTasks);
   }
 
@@ -78,6 +90,8 @@ function App(props) {
     />
   ));
 
+  const hasCompletedTasks = tasks.some((task) => task.completed);
+
   function addTask(name) {
     const newTask = { id: "todo-" + nanoid(), name: name, completed: false };
     setTasks([...tasks, newTask]);
@@ -99,7 +113,18 @@ function App(props) {
     <div className="todoapp stack-large">
       <h1>TodoMatic</h1>
       <Form addTask={addTask} />
-      <div className="filters btn-group stack-exception">{filterList}</div>
+      <div className="filters btn-group stack-exception">
+        {filterList}
+        {hasCompletedTasks && (
+          <button
+            type="button"
+            className="btn btn__danger"
+            onClick={deleteCompletedTasks}
+          >
+            Delete All Completed
+          </button>
+        )}
+      </div>
       <h2 id="list-heading" tabIndex="-1" ref={listHeadingRef}>
         {headingText}
       </h2>
