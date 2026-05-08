@@ -42,6 +42,11 @@ function App(props) {
     setTasks(remainingTasks);
   }
 
+  function deleteCompletedTasks() {
+    const remainingTasks = tasks.filter((task) => !task.completed);
+    setTasks(remainingTasks);
+  }
+
   function editTask(id, newName) {
     const editedTaskList = tasks.map((task) => {
       // if this task has the same ID as the edited task
@@ -110,6 +115,16 @@ function App(props) {
       >
         {taskList}
       </ul>
+      {tasks.some((task) => task.completed) && (
+        <button
+          type="button"
+          className="btn btn__danger"
+          onClick={deleteCompletedTasks}
+          style={{ marginTop: "2rem", width: "100%" }}
+        >
+          Delete All Completed
+        </button>
+      )}
     </div>
   );
 }
