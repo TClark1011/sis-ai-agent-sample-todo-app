@@ -56,13 +56,24 @@ function Todo(props) {
         <label className="todo-label" htmlFor={props.id + "-date"}>
           New due date for {props.name}
         </label>
-        <input
-          id={props.id + "-date"}
-          className="todo-text"
-          type="date"
-          value={newDueDate}
-          onChange={handleDateChange}
-        />
+        <div className="date-input-container">
+          <input
+            id={props.id + "-date"}
+            className="todo-text"
+            type="date"
+            value={newDueDate}
+            onChange={handleDateChange}
+          />
+          {newDueDate && (
+            <button
+              type="button"
+              className="btn btn__danger"
+              onClick={() => setNewDueDate("")}
+            >
+              Clear
+            </button>
+          )}
+        </div>
       </div>
       <div className="btn-group">
         <button

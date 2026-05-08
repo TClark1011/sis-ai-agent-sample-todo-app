@@ -224,6 +224,15 @@ body {
 .todo-text:focus-visible {
   box-shadow: inset 0 0 0 2px;
 }
+.date-input-container {
+  display: flex;
+  gap: 0.8rem;
+  align-items: stretch;
+  margin-top: 0.4rem;
+}
+.date-input-container > input {
+  flex-grow: 1;
+}
 /* End todo item styles */
 /* Checkbox styles */
 .c-cb {
