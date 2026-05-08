@@ -115,15 +115,14 @@ function App(props) {
       <Form addTask={addTask} />
       <div className="filters btn-group stack-exception">
         {filterList}
-        {hasCompletedTasks && (
-          <button
-            type="button"
-            className="btn btn__danger"
-            onClick={deleteCompletedTasks}
-          >
-            Delete All Completed
-          </button>
-        )}
+        <button
+          type="button"
+          className="btn btn__danger"
+          onClick={deleteCompletedTasks}
+          disabled={!hasCompletedTasks}
+        >
+          Delete All Completed
+        </button>
       </div>
       <h2 id="list-heading" tabIndex="-1" ref={listHeadingRef}>
         {headingText}
