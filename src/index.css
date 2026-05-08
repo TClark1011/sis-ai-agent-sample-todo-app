@@ -94,6 +94,11 @@ body {
   border-color: #bd2130;
   color: #fff;
 }
+.btn__danger:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  filter: grayscale(1);
+}
 .btn__filter {
   border-color: lightgrey;
 }
