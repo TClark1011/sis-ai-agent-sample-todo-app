@@ -21,8 +21,23 @@ const FILTER_MAP = {
 const FILTER_NAMES = Object.keys(FILTER_MAP);
 
 function App(props) {
-  const [tasks, setTasks] = useState(props.tasks);
+  const [tasks, setTasks] = useState(() => {
+    const savedTasks = localStorage.getItem("todo-tasks");
+    if (savedTasks) {
+      try {
+        return JSON.parse(savedTasks);
+      } catch (e) {
+        console.error("Failed to parse tasks from localStorage", e);
+        return props.tasks;
+      }
+    }
+    return props.tasks;
+  });
   const [filter, setFilter] = useState("All");
+
+  useEffect(() => {
+    localStorage.setItem("todo-tasks", JSON.stringify(tasks));
+  }, [tasks]);
 
   function toggleTaskCompleted(id) {
     const updatedTasks = tasks.map((task) => {
