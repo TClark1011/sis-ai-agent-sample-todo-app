@@ -42,12 +42,12 @@ function App(props) {
     setTasks(remainingTasks);
   }
 
-  function editTask(id, newName) {
+  function editTask(id, newName, newDueDate) {
     const editedTaskList = tasks.map((task) => {
       // if this task has the same ID as the edited task
       if (id === task.id) {
-        // Copy the task and update its name
-        return { ...task, name: newName };
+        // Copy the task and update its name and due date
+        return { ...task, name: newName, dueDate: newDueDate };
       }
       // Return the original task if it's not the edited task
       return task;
@@ -61,6 +61,7 @@ function App(props) {
       <Todo
         id={task.id}
         name={task.name}
+        dueDate={task.dueDate}
         completed={task.completed}
         key={task.id}
         toggleTaskCompleted={toggleTaskCompleted}
@@ -78,8 +79,13 @@ function App(props) {
     />
   ));
 
-  function addTask(name) {
-    const newTask = { id: "todo-" + nanoid(), name: name, completed: false };
+  function addTask(name, dueDate) {
+    const newTask = {
+      id: "todo-" + nanoid(),
+      name: name,
+      completed: false,
+      dueDate: dueDate,
+    };
     setTasks([...tasks, newTask]);
   }
 
