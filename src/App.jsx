@@ -118,11 +118,11 @@ function App(props) {
       <div className="theme-toggle-container">
         <button
           type="button"
-          className="btn"
+          className="btn theme-toggle-btn"
           onClick={toggleDarkMode}
-          aria-pressed={darkMode}
+          aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"}
         >
-          {darkMode ? "Light" : "Dark"} Mode
+          {darkMode ? "☀️" : "🌙"}
         </button>
       </div>
       <h1>TodoMatic</h1>
